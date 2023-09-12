@@ -8,6 +8,7 @@ import {
   TextInput,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
 
 const Signup = () => {
   const [name, setName] = React.useState('');
@@ -30,6 +31,19 @@ const Signup = () => {
   };
   const handlePasswordChange = pass => {
     setPassword(pass);
+  };
+
+  const handleSignUp = async () => {
+    if (email !== '' && password !== '') {
+      try {
+        await auth().createUserWithEmailAndPassword(email, password);
+        console.log('User Created Successfully');
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    } else {
+      console.log('Please Provide an Email and Password');
+    }
   };
   return (
     <View style={styles.window}>
@@ -111,7 +125,7 @@ const Signup = () => {
           </View>
         </View>
       </View>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
         <Text style={styles.btnText}>Sign Up</Text>
       </TouchableOpacity>
     </View>

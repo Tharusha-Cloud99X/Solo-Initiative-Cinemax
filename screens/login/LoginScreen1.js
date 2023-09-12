@@ -9,6 +9,10 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
+import auth from '@react-native-firebase/auth';
+
+//import auth from '@react-native-firebase/auth';
+
 const LoginScreen1 = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -22,6 +26,19 @@ const LoginScreen1 = () => {
   };
   const handlePasswordChange = pass => {
     setPassword(pass);
+  };
+
+  const handleLogin = async () => {
+    if (email !== '' && password !== '') {
+      try {
+        await auth().signInWithEmailAndPassword(email, password);
+        console.log('Logged in successfully');
+      } catch (error) {
+        console.error('Error signing in:', error);
+      }
+    } else {
+      console.log('Please Provide an Email and Password');
+    }
   };
 
   return (
@@ -72,9 +89,7 @@ const LoginScreen1 = () => {
           <Text style={styles.textStyle3}>Forgot Password?</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('Home')}>
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.btnText}>Login</Text>
       </TouchableOpacity>
     </View>
